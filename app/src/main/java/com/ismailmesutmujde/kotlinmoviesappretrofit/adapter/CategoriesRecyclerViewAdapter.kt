@@ -26,8 +26,7 @@ class CategoriesRecyclerViewAdapter (private val mContext: Context, private val 
     }
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): CardDesignHolder {
-        val design =
-            LayoutInflater.from(mContext).inflate(R.layout.category_card_design, parent, false)
+        val design = LayoutInflater.from(mContext).inflate(R.layout.category_card_design, parent, false)
         return CardDesignHolder(design)
     }
 

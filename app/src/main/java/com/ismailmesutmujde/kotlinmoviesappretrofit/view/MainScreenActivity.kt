@@ -5,8 +5,14 @@ import androidx.appcompat.app.AppCompatActivity
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.ismailmesutmujde.kotlinmoviesappretrofit.R
 import com.ismailmesutmujde.kotlinmoviesappretrofit.adapter.CategoriesRecyclerViewAdapter
+import com.ismailmesutmujde.kotlinmoviesappretrofit.dao.CategoriesDaoInterface
 import com.ismailmesutmujde.kotlinmoviesappretrofit.databinding.ActivityMainScreenBinding
 import com.ismailmesutmujde.kotlinmoviesappretrofit.model.Categories
+import com.ismailmesutmujde.kotlinmoviesappretrofit.model.CategoriesResponse
+import com.ismailmesutmujde.kotlinmoviesappretrofit.service.ApiUtils
+import retrofit2.Call
+import retrofit2.Callback
+import retrofit2.Response
 
 class MainScreenActivity : AppCompatActivity() {
 
@@ -14,6 +20,9 @@ class MainScreenActivity : AppCompatActivity() {
 
     private lateinit var categoryList:ArrayList<Categories>
     private lateinit var adapterCategory: CategoriesRecyclerViewAdapter
+
+    private lateinit var cdi:CategoriesDaoInterface
+
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         bindingMainScreen = ActivityMainScreenBinding.inflate(layoutInflater)
@@ -26,6 +35,9 @@ class MainScreenActivity : AppCompatActivity() {
         bindingMainScreen.recyclerViewCategory.setHasFixedSize(true)
         bindingMainScreen.recyclerViewCategory.layoutManager = LinearLayoutManager(this)
 
+        cdi = ApiUtils.getCategoriesDaoInterface()
+
+        /*
         categoryList = ArrayList()
 
         val c1 = Categories(1,"Science Fiction")
@@ -52,8 +64,29 @@ class MainScreenActivity : AppCompatActivity() {
 
         adapterCategory = CategoriesRecyclerViewAdapter(this, categoryList)
         bindingMainScreen.recyclerViewCategory.adapter = adapterCategory
+        */
 
+        allCategories()
+    }
 
+    fun allCategories() {
+        cdi.allCategories().enqueue(object : Callback<CategoriesResponse>{
+            override fun onResponse(
+                call: Call<CategoriesResponse>,
+                response: Response<CategoriesResponse>
+            ) {
+                if (response != null) {
+                    val list = response.body()!!.categories
+                    adapterCategory = CategoriesRecyclerViewAdapter(this@MainScreenActivity, list)
+                    bindingMainScreen.recyclerViewCategory.adapter = adapterCategory
+                }
+            }
+
+            override fun onFailure(call: Call<CategoriesResponse>, t: Throwable) {
+
+            }
+
+        })
 
     }
 }

@@ -12,6 +12,7 @@ import androidx.recyclerview.widget.RecyclerView
 import com.ismailmesutmujde.kotlinmoviesappretrofit.R
 import com.ismailmesutmujde.kotlinmoviesappretrofit.model.Movies
 import com.ismailmesutmujde.kotlinmoviesappretrofit.view.MoviesDetailScreenActivity
+import com.squareup.picasso.Picasso
 
 class MoviesRecyclerViewAdapter (private val mContext: Context, private val moviesList:List<Movies>)
     : RecyclerView.Adapter<MoviesRecyclerViewAdapter.CardDesignHolder>() {
@@ -42,13 +43,10 @@ class MoviesRecyclerViewAdapter (private val mContext: Context, private val movi
         val movie = moviesList.get(position)
         holder.textViewMovieName.text = movie.movie_name
 
-        holder.imageViewMoviePoster.setImageResource(
-            mContext.resources.getIdentifier(
-                movie.movie_poster,
-                "drawable",
-                mContext.packageName
-            )
-        )
+        val url = "http://kasimadalan.pe.hu/filmler/resimler/${movie.movie_poster}"
+        Picasso.get().load(url).into(holder.imageViewMoviePoster)
+
+        //holder.imageViewMoviePoster.setImageResource(mContext.resources.getIdentifier(movie.movie_poster,"drawable",mContext.packageName))
 
         holder.movie_card.setOnClickListener {
             val intent = Intent(mContext, MoviesDetailScreenActivity::class.java)
