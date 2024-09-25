@@ -7,6 +7,10 @@ android {
     namespace = "com.ismailmesutmujde.kotlinmoviesappretrofit"
     compileSdk = 34
 
+    buildFeatures {
+        viewBinding = true
+    }
+
     defaultConfig {
         applicationId = "com.ismailmesutmujde.kotlinmoviesappretrofit"
         minSdk = 24
